@@ -27,4 +27,10 @@ class UserLoginSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=200)
     class Meta:
         model = User
-        fields = ['email', 'password']                
+        fields = ['email', 'password']
+
+
+class UserViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'name']                 

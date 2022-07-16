@@ -1,10 +1,13 @@
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from account.serializers import UserRegistrationSerializer, UserLoginSerializer
+from account.serializers import UserRegistrationSerializer, UserLoginSerializer, UserViewSerializer
 from account.models import User
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 def get_tokens_for_user(user):
@@ -55,5 +58,18 @@ class UserLoginView(APIView):
                 return Response({"status":False, "result":serializer.errors, "message":"User not Logged In Successfully !"})
         except Exception as error:
             return Response({"status":False, "result":serializer.errors, "message":"User not Logged In Successfully !"})
+
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def User_view(request, name=None):
+    get_obj = User.objects.get(name=name)
+    serializer = UserViewSerializer(get_obj)
+    if serializer:
+        result = dict()
+        result['data'] = serializer.data
+        return Response({"status":True, "result":result, "message":"Records fetched Successfully !"})
+    else:
+        return Response({"status":False, "result":dict(), "message":"Records not fetched Successfully !"})
 
 
