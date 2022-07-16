@@ -52,7 +52,7 @@ class UserLoginView(APIView):
                 else:
                     return Response({"status":False, "message":"Email & Password Doesn't Match !"}) 
             else:
-                return Response({"status":False, "result":serializer.errors, "message":"Email & Password Doesn't Match !"})
+                return Response({"status":False, "result":serializer.errors, "message":"User not Logged In Successfully !"})
         except Exception as error:
             return Response({"status":False, "result":serializer.errors, "message":"User not Logged In Successfully !"})
 
